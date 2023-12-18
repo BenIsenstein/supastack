@@ -9,7 +9,7 @@ app_name = input('Project name: ')
 public_or_private = input('Would you like your new Github repo to be public or private? Type either "public" or "private". ')
 
 process = subprocess.Popen(
-    f'git clone https://github.com/BenIsenstein/open-data-react-supabase.git "{app_name}"',
+    f'cp -r -v react_template "{app_name}"',
     text=True,
     shell=True
 )
@@ -22,7 +22,7 @@ if process.returncode != 0:
 os.chdir(app_name)
 
 process = subprocess.Popen(
-    f"rm -rf .git && git init && git add . && git commit -m 'feat: create repo'",
+    f"git init && git add . && git commit -m 'feat: create repo'",
     text=True,
     shell=True
 )
@@ -71,8 +71,8 @@ supabase_project_output, stderr = process.communicate()
 if process.returncode != 0:
     sys.exit(process.returncode)
 
-supabase_project_url = supabase_project_output.split()[-1]
-supabase_project_id = supabase_project_output.split('/')[-1]
+supabase_project_url = supabase_project_output.split()[-1].strip()
+supabase_project_id = supabase_project_output.split('/')[-1].strip()
 
 try_count = 0
 
@@ -104,14 +104,25 @@ print(f"Created supabase project at {supabase_project_url}")
 
 os.chdir('terraform')
 
-with open('config.tfvars', 'w+') as file:
+with open('terraform.tfvars', 'w+') as file:
     file.write(f'project_name = "{app_name}"\n')
-    file.write(f'repo_url = "{repo_url.strip()}"\n')
+    file.write(f'repo_name = "{app_name}"\n')
     file.write(f'supabase_key = "{supabase_anon_key}"\n')
     file.write(f'supabase_url = "https://{supabase_project_id}.supabase.co"')
 
 process = subprocess.Popen(
-    f"terraform init && terraform apply --var-file config.tfvars",
+    f"terraform init && terraform apply",
+    text=True,
+    shell=True
+)
+
+process.wait()
+
+if process.returncode != 0:
+    sys.exit(process.returncode)
+
+process = subprocess.Popen(
+    f"git add . && git commit -m 'chore: commit tfstate' && git push",
     text=True,
     shell=True
 )
