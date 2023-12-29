@@ -14,7 +14,7 @@ module "s3_web_bucket" {
   version = "3.15.1"
 
   bucket        = local.bucket_name
-  force_destroy = false
+  force_destroy = var.force_destroy
 
   versioning = {
     enabled = false

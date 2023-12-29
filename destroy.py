@@ -3,8 +3,6 @@ import sys
 import os
 import re
 
-input('Empty the s3 bucket(s) manually, then press enter to continue.')
-
 app_name = input('Project name: ')
 
 os.chdir(f'{app_name}/terraform')
@@ -20,8 +18,11 @@ with open('terraform.tfvars', 'r') as file:
 supabase_url = config_values.get('supabase_url')
 supabase_id = re.search(r'https://([a-zA-Z0-9_-]+)\.supabase\.co', supabase_url).groups()[0]
 
+with open('terraform.tfvars', 'a') as file:
+    file.write('\nforce_destroy = true')
+
 process = subprocess.Popen(
-    "terraform destroy",
+    "terraform apply && terraform destroy",
     text=True,
     shell=True
 )
