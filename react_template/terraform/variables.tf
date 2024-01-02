@@ -40,3 +40,9 @@ variable "supabase_url" {
   description = "Supabase Anonymous Project url"
   type        = string
 }
+
+variable "force_destroy" {
+  description = "Force destroy setting on the web app S3 bucket."
+  type        = bool
+  default     = false
+}
