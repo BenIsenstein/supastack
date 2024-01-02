@@ -1,69 +1,31 @@
-import subprocess
-import sys
 import os
 import re
+from subprocess_helper import run_command
 
-app_name = input('Project name: ')
+def main():
+    app_name = input('Project name: ')
+    config_values = {}
 
-os.chdir(f'{app_name}/terraform')
+    os.chdir(f'{app_name}/terraform')
 
-config_values = {}
+    with open('terraform.tfvars', 'r') as file:
+        for line in file:
+            key, value = map(str.strip, line.split('='))
+            value = value.strip('"')
+            config_values[key] = value
 
-with open('terraform.tfvars', 'r') as file:
-    for line in file:
-        key, value = map(str.strip, line.split('='))
-        value = value.strip('"')
-        config_values[key] = value
+    with open('terraform.tfvars', 'a') as file:
+        file.write('\nforce_destroy = true')
+    
+    supabase_id = re.search(r'https://([a-zA-Z0-9_-]+)\.supabase\.co', config_values.get('supabase_url')).groups()[0]
+    
+    run_command("terraform apply && terraform destroy")
 
-supabase_url = config_values.get('supabase_url')
-supabase_id = re.search(r'https://([a-zA-Z0-9_-]+)\.supabase\.co', supabase_url).groups()[0]
+    os.chdir('../..')
 
-with open('terraform.tfvars', 'a') as file:
-    file.write('\nforce_destroy = true')
+    run_command(f"supabase projects delete {supabase_id}")
+    run_command(f"gh repo delete '{app_name}' --yes")
+    run_command(f"rm -rf '{app_name}'")
 
-process = subprocess.Popen(
-    "terraform apply && terraform destroy",
-    text=True,
-    shell=True
-)
-
-process.wait()
-
-if process.returncode != 0:
-    sys.exit(process.returncode)
-
-os.chdir('../..')
-
-process = subprocess.Popen(
-    f"supabase projects delete {supabase_id}",
-    text=True,
-    shell=True
-)
-
-process.wait()
-
-if process.returncode != 0:
-    sys.exit(process.returncode)
-
-process = subprocess.Popen(
-    f"gh repo delete '{app_name}' --yes",
-    text=True,
-    shell=True
-)
-
-process.wait()
-
-if process.returncode != 0:
-    sys.exit(process.returncode)
-
-process = subprocess.Popen(
-    f"rm -rf '{app_name}'",
-    text=True,
-    shell=True
-)
-
-process.wait()
-
-if process.returncode != 0:
-    sys.exit(process.returncode)
-
+if __name__ == '__main__':
+    main()
