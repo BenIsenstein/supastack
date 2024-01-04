@@ -12,9 +12,8 @@ def main():
 
     os.chdir(app_name)
 
-    run_command(f"git init && git add . && git commit -m 'feat: create repo'")
+    run_command("git init && git add . && git commit -m 'feat: create repo'")
     run_command(f"gh repo create '{app_name}' --{public_or_private} --source . --description 'Web app created with Supastack' --push")
-    run_command('git remote get-url origin')
 
     supabase_org = input('Please paste your supabase organization ID. ')
     supabase_pswd = getpass.getpass('Please paste a db password for supabase. ')
