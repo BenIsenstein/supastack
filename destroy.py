@@ -11,8 +11,7 @@ def main():
     with open('terraform.tfvars', 'r') as file:
         for line in file:
             key, value = map(str.strip, line.split('='))
-            value = value.strip('"')
-            config_values[key] = value
+            config_values[key] = value.strip('"')
 
     with open('terraform.tfvars', 'a') as file:
         file.write('\nforce_destroy = true')
