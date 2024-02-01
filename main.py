@@ -1,11 +1,8 @@
 from enum import auto, StrEnum
-import getpass
 import os
 import re
 import subprocess
-
 import inquirer
-
 from subprocess_helper import run_command, run_command_with_retry
 
 
