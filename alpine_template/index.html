@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="/src/main.ts"></script>
+    <title>AlpineJS + UnoCSS + Supabase</title>
+  </head>
+  <body>
+    <div class="box-border p-5 relative">
+      <button x-data x-show="$store.app.user !== null" @click="$store.app.withCaptureAuthError(() => $store.app.supabase.auth.signOut())" class="absolute top-5 right-5 font-semibold hover:underline active:text-zinc-500 bg-transparent z-50">
+        Logout
+      </button>
+      <div class="relative flex flex-col items-center gap-6 pt-10 md:pt-6 md:flex-row md:justify-center md:items-start">
+        <div class="relative w-full max-w-sm border-[1px] border-slate-300 rounded-lg shadow-lg px-8 py-12">
+          <div class="mb-6 flex flex-col gap-3">
+            <h1 class="text-scale-1200 text-2xl">
+              Acme Industries
+            </h1>
+            <p class="text-scale-1100">
+              Sign in today for Supa stuff
+            </p>
+          </div>
+          <span x-data="authUI({ providers: [] })" x-show="$store.authView.view !== null"></span>
+        </div>
+        <div class="flex flex-col items-center gap-4 border-[1px] border-slate-300 rounded-lg shadow-sm p-8 mb-6 h-max">
+          <div class="text-scale-1200 text-base font-semibold">Component View</div>
+          <select x-data :value="$store.authView.view" @change="$store.app.error = null; $store.authView.view = $event.target.value" class="text-lg rounded border-[1px] border-slate-950 text-gray-600 pl-5 pr-10 h-12 bg-white hover:bg-slate-100 cursor-pointer appearance-none w-max text-center">
+            <template x-for="(v, i) in $store.authView.views" :key="i">
+              <option :value="v.id" x-text="v.title"></option>
+            </template>
+          </select>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

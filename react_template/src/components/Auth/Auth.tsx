@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC, useRef } from 'react'
-import { I18nVariables, merge, VIEWS, en, template, ViewType, ProviderScopes, RedirectTo, OtpType  } from '@supabase/auth-ui-shared'
+import { I18nVariables, merge, VIEWS, en, template, ViewType, ProviderScopes, OtpType } from '@supabase/auth-ui-shared'
 import { Provider } from '@supabase/supabase-js'
 import { useAppContext } from 'contexts'
 
@@ -11,7 +11,7 @@ type AuthProps = {
   }
   view: ViewType
   setView?: React.Dispatch<React.SetStateAction<ViewType>>
-  redirectTo?: RedirectTo
+  redirectTo?: string | undefined
   onlyThirdPartyProviders?: boolean
   magicLink?: boolean
   showLinks?: boolean

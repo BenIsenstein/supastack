@@ -14,11 +14,11 @@
 ## Setup
 Install the following tools and authenticate as needed:
 
-[Github CLI](https://cli.github.com/)
-[Supabase CLI](https://supabase.com/docs/guides/cli/getting-started)
-[AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-[Terraform](https://developer.hashicorp.com/terraform/install)
-[Python 3](https://www.python.org/downloads/)
+- [Github CLI](https://cli.github.com/)
+- [Supabase CLI](https://supabase.com/docs/guides/cli/getting-started)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [Terraform](https://developer.hashicorp.com/terraform/install)
+- [Python 3](https://www.python.org/downloads/)
 
 ## Install
 
